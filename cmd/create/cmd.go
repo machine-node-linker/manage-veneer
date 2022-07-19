@@ -18,7 +18,7 @@ func NewCMD() *cobra.Command {
 		PreRunE: func(cmd *cobra.Command, _ []string) error {
 			file, err := cmd.Flags().GetString("file")
 			if err != nil {
-				return err
+				return fmt.Errorf("unable to read file name: %w", err)
 			}
 			if overwrite, _ := cmd.Flags().GetBool("overwrite"); !overwrite {
 				_, err = os.Stat(file)
@@ -29,7 +29,9 @@ func NewCMD() *cobra.Command {
 			dir, _ := path.Split(file)
 			if mkdir, _ := cmd.Flags().GetBool("make-dirs"); mkdir {
 				if dir != "" {
-					return os.MkdirAll(dir, 0755)
+					if err := os.MkdirAll(dir, 0755); err != nil {
+						return fmt.Errorf("unable to make path: %w", err)
+					}
 				}
 			} else {
 				stat, err := os.Stat(dir)

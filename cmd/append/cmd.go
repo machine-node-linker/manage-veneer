@@ -1,6 +1,7 @@
 package append
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -17,7 +18,7 @@ func NewCMD() *cobra.Command {
 			file, _ := cmd.Flags().GetString("file")
 
 			if _, err := os.Stat(file); err != nil {
-				return err
+				return fmt.Errorf("unable to read file: %w", err)
 			}
 			return nil
 		},
@@ -27,7 +28,7 @@ func NewCMD() *cobra.Command {
 
 	cmd.Flags().String("bundle", "", "bundle image to add")
 	cmd.Flags().String("channel", "candidate", "channel to add bundle to")
-	cmd.Flags().Bool("no-lower", false, "dont add to channels below --channel")
+	cmd.Flags().Bool("add-lower", true, "add to channels below --channel")
 
 	cmd.MarkFlagRequired("bundle")
 

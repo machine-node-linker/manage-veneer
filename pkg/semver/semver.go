@@ -33,7 +33,7 @@ func (b *bundleSlice) contains(i string) bool {
 	return false
 }
 
-type semverVeneer struct {
+type SemverVeneer struct { //nolint:golint,naming
 	Schema                string      `yaml:"Schema"`
 	GenerateMajorChannels bool        `yaml:"GenerateMajorChannels"`
 	GenerateMinorChannels bool        `yaml:"GenerateMinorChannels"`
@@ -56,7 +56,7 @@ func getChannelOrder() []channel {
 }
 
 func GetIncludedChannels(ch string) []string {
-	channels := make([]string, 3)
+	channels := make([]string, len(getChannelOrder()))
 	for i, chs := range getChannelOrder() {
 		channels[i] = string(chs)
 	}
@@ -72,22 +72,22 @@ func GetIncludedChannels(ch string) []string {
 	return channels
 }
 
-func LoadFile(filename string) (*semverVeneer, error) {
-	sv := &semverVeneer{}
+func LoadFile(filename string) (*SemverVeneer, error) {
+	sv := &SemverVeneer{}
 
 	data, err := os.ReadFile(filename)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("unable to read file: %w", err)
 	}
 
 	if err = yaml.Unmarshal(data, sv); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("unable to unmarshal file: %w", err)
 	}
 
 	return sv, nil
 }
 
-func (sv *semverVeneer) AddBundleToChannel(bundle string, ch string) error {
+func (sv *SemverVeneer) AddBundleToChannel(bundle string, ch string) error {
 	svch, err := sv.getChannel(channel(ch))
 	if err != nil {
 		return err
@@ -96,7 +96,7 @@ func (sv *semverVeneer) AddBundleToChannel(bundle string, ch string) error {
 	return svch.add(bundle)
 }
 
-func (sv *semverVeneer) getChannel(ch channel) (*bundleSlice, error) {
+func (sv *SemverVeneer) getChannel(ch channel) (*bundleSlice, error) {
 	// fix this
 	switch ch {
 	case candidateChannel:
@@ -110,17 +110,17 @@ func (sv *semverVeneer) getChannel(ch channel) (*bundleSlice, error) {
 	return nil, fmt.Errorf("invalid channel %s", ch)
 }
 
-func (sv *semverVeneer) WriteFile(filename string) error {
+func (sv *SemverVeneer) WriteFile(filename string) error {
 	data, err := yaml.Marshal(sv)
 	if err != nil {
-		return err
+		return fmt.Errorf("unable to write file: %w", err)
 	}
 
 	return os.WriteFile(filename, data, 0644)
 }
 
-func NewSemverVeneer() *semverVeneer {
-	return &semverVeneer{
+func NewSemverVeneer() *SemverVeneer {
+	return &SemverVeneer{
 		GenerateMajorChannels: true,
 		GenerateMinorChannels: false,
 		Schema:                "olm.semver",

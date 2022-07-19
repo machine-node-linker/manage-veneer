@@ -17,9 +17,24 @@ linters:
     - goconst
     - gofmt
     - gomnd
-    - whitespace 
+    - whitespace
 linters-settings:
   gomnd:
     ignored-functions:
       - os.Mkdir*
-      - os.WriteFile
+      - os.WriteFil
+  errcheck:
+    exclude-functions:
+      - (*github.com/spf13/cobra.Command).MarkFlagRequired
+      - (*github.com/spf13/cobra.Command).MarkPersistentFlagRequired
+  wrapcheck:
+    ignoreSigs:
+      - .Errorf(
+      - errors.New(
+      - errors.Unwrap(
+      - .Wrap(
+      - .Wrapf(
+      - .WithMessage(
+      - .WithMessagef(
+      - .WithStack(
+      - .WriteFile(
