@@ -8,7 +8,7 @@ import (
 func Run(cmd *cobra.Command, _ []string) error {
 	file, _ := cmd.Flags().GetString("file")
 	bundle, _ := cmd.Flags().GetString("bundle")
-	channel, _ := cmd.Flags().GetStringSlice("channel")
+	channel, _ := cmd.Flags().GetString("channel")
 	no_lower, _ := cmd.Flags().GetBool("no-lower")
 
 	sv, err := semver.LoadFile(file)
@@ -17,7 +17,7 @@ func Run(cmd *cobra.Command, _ []string) error {
 	}
 	var channels []string
 	if no_lower {
-		channels = channel
+		channels[0] = channel
 	} else {
 		channels = semver.GetIncludedChannels(channel)
 	}

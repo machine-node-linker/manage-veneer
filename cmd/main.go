@@ -10,8 +10,10 @@ import (
 func main() {
 	cmd := root.NewCMD()
 	cmd.SetErr(github.ErrorWriter{})
+
 	if err := cmd.Execute(); err != nil {
 		os.Exit(1)
 	}
+
 	os.Exit(0)
 }

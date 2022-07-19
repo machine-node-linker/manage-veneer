@@ -3,9 +3,8 @@ package semver
 import (
 	"fmt"
 	"os"
-	"sort"
 
-	"sigs.k8s.io/yaml"
+	"gopkg.in/yaml.v3"
 )
 
 type semverVeneerBundleEntry struct {
@@ -13,17 +12,35 @@ type semverVeneerBundleEntry struct {
 }
 
 type bundleSlice struct {
-	Bundles []semverVeneerBundleEntry
+	Bundles []semverVeneerBundleEntry `yaml:"Bundles"`
+}
+
+func (b *bundleSlice) add(i string) error {
+	if !b.contains(i) {
+		b.Bundles = append(b.Bundles, semverVeneerBundleEntry{i})
+	}
+
+	return nil
+}
+
+func (b *bundleSlice) contains(i string) bool {
+	for _, entry := range b.Bundles {
+		if entry.Image == i {
+			return true
+		}
+	}
+
+	return false
 }
 
 type semverVeneer struct {
-	Schema                string
-	GenerateMajorChannels bool
-	GenerateMinorChannels bool
-	AvoidSkipPatch        bool `json:",omitempty"`
-	Candidate             bundleSlice
-	Fast                  bundleSlice
-	Stable                bundleSlice
+	Schema                string      `yaml:"Schema"`
+	GenerateMajorChannels bool        `yaml:"GenerateMajorChannels"`
+	GenerateMinorChannels bool        `yaml:"GenerateMinorChannels"`
+	AvoidSkipPatch        bool        `yaml:"AvoidSkipPatch,omitempty"`
+	Candidate             bundleSlice `yaml:"Candidate"`
+	Fast                  bundleSlice `yaml:"Fast"`
+	Stable                bundleSlice `yaml:"Stable"`
 }
 
 type channel string
@@ -38,30 +55,20 @@ func getChannelOrder() []channel {
 	return []channel{stableChannel, fastChannel, candidateChannel}
 }
 
-func GetIncludedChannels(ch []string) []string {
+func GetIncludedChannels(ch string) []string {
 	channels := make([]string, 3)
 	for i, chs := range getChannelOrder() {
 		channels[i] = string(chs)
 	}
 
-	if len(ch) > 0 {
-		sort.Slice(ch, func(i, j int) bool {
-			switch channel(ch[i]) {
-			case candidateChannel:
-				return true
-			case stableChannel:
-				return false
-			}
-			return channel(ch[j]) == stableChannel
-		})
-	}
-
 	for range channels {
-		if channels[0] == ch[0] {
+		if channels[0] == ch {
 			return channels
 		}
+
 		channels = channels[1:]
 	}
+
 	return channels
 }
 
@@ -85,8 +92,8 @@ func (sv *semverVeneer) AddBundleToChannel(bundle string, ch string) error {
 	if err != nil {
 		return err
 	}
-	svch.Bundles = append(svch.Bundles, semverVeneerBundleEntry{bundle})
-	return nil
+
+	return svch.add(bundle)
 }
 
 func (sv *semverVeneer) getChannel(ch channel) (*bundleSlice, error) {
@@ -99,6 +106,7 @@ func (sv *semverVeneer) getChannel(ch channel) (*bundleSlice, error) {
 	case stableChannel:
 		return &sv.Stable, nil
 	}
+
 	return nil, fmt.Errorf("invalid channel %s", ch)
 }
 
@@ -107,6 +115,7 @@ func (sv *semverVeneer) WriteFile(filename string) error {
 	if err != nil {
 		return err
 	}
+
 	return os.WriteFile(filename, data, 0644)
 }
 

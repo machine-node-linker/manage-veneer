@@ -1,4 +1,4 @@
-package root
+package append
 
 import (
 	"os"
@@ -26,7 +26,7 @@ func NewCMD() *cobra.Command {
 	}
 
 	cmd.Flags().String("bundle", "", "bundle image to add")
-	cmd.Flags().StringSlice("channel", []string{"candidate"}, "channel to add bundle to")
+	cmd.Flags().String("channel", "candidate", "channel to add bundle to")
 	cmd.Flags().Bool("no-lower", false, "dont add to channels below --channel")
 
 	cmd.MarkFlagRequired("bundle")

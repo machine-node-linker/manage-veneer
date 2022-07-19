@@ -21,7 +21,6 @@ func NewCMD() *cobra.Command {
 				return err
 			}
 			if overwrite, _ := cmd.Flags().GetBool("overwrite"); !overwrite {
-
 				_, err = os.Stat(file)
 				if !os.IsNotExist(err) {
 					return fmt.Errorf("will not modify %s without --overwrite", file)

@@ -5,16 +5,19 @@ import (
 	"io"
 )
 
+const ErrorCommand = "::error::"
+
 type ErrorWriter struct {
 	io.Writer
 }
 
-func (ErrorWriter) Write(p []byte) (n int, err error) {
-	n, err = fmt.Printf("::error::%s", p)
-	if n < 9 {
+func (ErrorWriter) Write(p []byte) (int, error) {
+	n, err := fmt.Printf("$ErrorCommand%s", p)
+	if n < len(ErrorCommand) {
 		n = 0
 	} else {
-		n = n - 9
+		n -= len(ErrorCommand)
 	}
+
 	return n, err
 }

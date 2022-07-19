@@ -1,0 +1,25 @@
+linters:
+  disable-all: true
+  enable:
+    - wrapcheck
+    - wsl
+    - golint
+    - gomoddirectives
+    - gocritic
+    - gosimple
+    - errcheck
+    - govet
+    - ineffassign
+    - staticcheck
+    - typecheck
+    - unused
+    - varcheck
+    - goconst
+    - gofmt
+    - gomnd
+    - whitespace 
+linters-settings:
+  gomnd:
+    ignored-functions:
+      - os.Mkdir*
+      - os.WriteFile
