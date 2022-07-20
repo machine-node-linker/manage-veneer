@@ -12,7 +12,7 @@ import (
 
 func NewCMD() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create",
+		Use:   "create --file filename",
 		Short: "create new semver file",
 		Long:  "CLI to create and manage semvar veneer files for operator-framework/operator-registry",
 		PreRunE: func(cmd *cobra.Command, _ []string) error {
@@ -50,6 +50,10 @@ func NewCMD() *cobra.Command {
 
 	cmd.Flags().Bool("overwrite", false, "overwrite existing file")
 	cmd.Flags().Bool("make-dirs", true, "make missing directories in file path")
+	cmd.Flags().String("file", "", "Semver Veneer File Path")
+
+	cmd.MarkFlagRequired("file")
+	cmd.MarkFlagFilename("file")
 
 	return cmd
 }
