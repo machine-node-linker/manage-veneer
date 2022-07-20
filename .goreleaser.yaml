@@ -12,6 +12,7 @@ builds:
       - arm64
       - arm
     main: ./cmd
+    mod_timestamp: "{{ .CommitTimestamp }}"
 archives:
   - replacements:
       darwin: Darwin
@@ -33,6 +34,12 @@ dockers:
   - goos: linux
     goarch: amd64
     image_templates:
-      - "gcr.io/machine-node-linker/manage-veneer:latest"
-      - "gcr.io/machine-node-linker/manage-veneer:v{{ .Major }}"
-      - "gcr.io/machine-node-linker/manager-veneer:{{ .Tag }}"
+      - "gcr.io/machine-node-linker/{{.ProjectName}}:latest"
+      - "gcr.io/machine-node-linker/{{.ProjectName}}:v{{ .Major }}"
+      - "gcr.io/machine-node-linker/{{.ProjectName}}:{{ .Tag }}"
+    build_flat_templates:
+      - "--label=org.opencontainers.image.created={{.CommitDate}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+    skip_push: auto
