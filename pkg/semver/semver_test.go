@@ -135,11 +135,12 @@ func TestSemverVeneer_AddBundleToChannel(t *testing.T) {
 	}
 
 	tests := []struct {
-		name       string
-		fields     fields
-		args       args
-		wantErr    bool
-		wantFields fields
+		name      string
+		fields    fields
+		args      args
+		wantErr   bool
+		wantLen   int
+		wantLenCh channel
 	}{
 		{
 			name:   "testCandidate",
@@ -148,10 +149,9 @@ func TestSemverVeneer_AddBundleToChannel(t *testing.T) {
 				bundle: "testimage",
 				ch:     "candidate",
 			},
-			wantErr:    false,
-			wantFields: emptyFields().Candidate.Bundles[0]{Image: "testimage"},
-			wantLen:    1,
-			wantLenCh:  channel("candidate"),
+			wantErr:   false,
+			wantLen:   1,
+			wantLenCh: channel("candidate"),
 		},
 		{
 			name:   "testFast",
