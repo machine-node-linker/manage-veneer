@@ -6,8 +6,11 @@ builds:
       - CGO_ENABLED=0
     goos:
       - linux
-      - windows
       - darwin
+    goarch:
+      - amd64
+      - arm64
+      - arm
     main: ./cmd
 archives:
   - replacements:
@@ -27,9 +30,9 @@ changelog:
       - "^docs:"
       - "^test:"
 dockers:
-  goos: linux
-  goarch: amd64
-  image_templates:
-    - "gcr.io/machine-node-linker/manage-veneer:latest"
-    - "gcr.io/machine-node-linker/manage-veneer:v{{ .Major }}"
-    - "gcr.io/machine-node-linker/manager-veneer:{{ .Tag }}"
+  - goos: linux
+    goarch: amd64
+    image_templates:
+      - "gcr.io/machine-node-linker/manage-veneer:latest"
+      - "gcr.io/machine-node-linker/manage-veneer:v{{ .Major }}"
+      - "gcr.io/machine-node-linker/manager-veneer:{{ .Tag }}"
