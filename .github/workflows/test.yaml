@@ -1,17 +1,12 @@
-name: golangci-lint
+name: test
+
 on:
-  push:
-    tags:
-      - v*
-    branches:
-      - main
   pull_request:
     branches:
       - main
 
 jobs:
-  golangci-lint:
-    name: lint
+  tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -19,5 +14,6 @@ jobs:
         with:
           go-version-file: "go.mod"
           cache: true
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
+      - name: Test
+        run: |
+          go test ./...
