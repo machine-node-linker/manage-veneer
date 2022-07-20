@@ -25,3 +25,10 @@ changelog:
     exclude:
       - "^docs:"
       - "^test:"
+dockers:
+  goos: linux
+  goarch: amd64
+  image_templates:
+    - "gcr.io/machine-node-linker/manage-veneer:latest"
+    - "gcr.io/machine-node-linker/manage-veneer:v{{ .Major }}"
+    - "gcr.io/machine-node-linker/manager-veneer:{{ .Tag }}"
