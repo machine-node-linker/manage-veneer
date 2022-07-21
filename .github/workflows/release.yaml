@@ -31,7 +31,7 @@ jobs:
           go build -o ./dist/manage-veneer ./cmd/
 
       - name: Make Release
-        uses: go-semantic-release@v1
+        uses: go-semantic-release/action@v1
         id: release
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
