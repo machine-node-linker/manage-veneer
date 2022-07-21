@@ -40,7 +40,7 @@ jobs:
       - name: Build Container Image
         id: podmant
         uses: redhat-actions/buildah-build@v2
-        if: ${{steps.release.version != null}}
+        if: ${{steps.release.outputs.version != null}}
         with:
           containerfiles: Dockerfile
           context: ./dist/
@@ -50,7 +50,7 @@ jobs:
             latest
             v${{steps.release.outputs.version_major}} 
             v${{steps.release.outputs.version_major}}.${{steps.release.outputs.release_minor}}
-            ${{steps.release.outputs.verion}}
+            ${{steps.release.outputs.version}}
           labels: |
             org.opencontainers.image.url="${{github.server_url}}/${{github.repository}}
             org.opencontainers.image.author="${{github.server_url}}/${{github.repository_owner}}
@@ -63,7 +63,7 @@ jobs:
       - name: Push image
         id: push
         uses: redhat-actions/push-to-registry@v2
-        if: ${{steps.release.version != null}}s
+        if: ${{steps.release.outputs.version != null}}
         with:
           image: ${{ steps.build.outputs.image }}
           registry: ghcr.io/${{ github.repository_owner }}
