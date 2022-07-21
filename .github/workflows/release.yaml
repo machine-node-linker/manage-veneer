@@ -17,25 +17,28 @@ jobs:
         with:
           fetch-depth: 0
       - name: Fetch all tags
-        run: git fetch --force --tags
-      - uses: actions/setup-go@v3
+        run: |
+          git fetch --force --tags
+      - name: Setup Go
+        uses: actions/setup-go@v3
         with:
           go-version-file: "go.mod"
           cache: true
 
-      - name: Build CMD
+      - name: Build Package
         id: build
         run: |
           go build -o ./dist/manage-veneer ./cmd/
 
-      - uses: go-semantic-release@v1
+      - name: Make Release
+        uses: go-semantic-release@v1
         id: release
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           allow-initial-development-versions: true
 
       - name: Build Container Image
-        id: build
+        id: podmant
         uses: redhat-actions/buildah-build@v2
         with:
           containerfiles: Dockerfile
