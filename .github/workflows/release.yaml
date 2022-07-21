@@ -40,6 +40,7 @@ jobs:
       - name: Build Container Image
         id: podmant
         uses: redhat-actions/buildah-build@v2
+        if: ${{steps.release.version != null}}
         with:
           containerfiles: Dockerfile
           context: ./dist/
@@ -57,11 +58,12 @@ jobs:
             org.opencontainers.image.title=manage-veneer
             org.opencontainers.image.revision=${{github.sha}}
             org.opencontainers.image.version=${{steps.version.outputs.version_tag}}
-            org.opencontainers.image.description=CLI to create and manage semvar veneer files for operator-framework/operator-registry
+            org.opencontainers.image.description=CLI to create and manage semver veneer files for operator-framework/operator-registry
 
       - name: Push image
         id: push
         uses: redhat-actions/push-to-registry@v2
+        if: ${{steps.release.version != null}}s
         with:
           image: ${{ steps.build.outputs.image }}
           registry: ghcr.io/${{ github.repository_owner }}
