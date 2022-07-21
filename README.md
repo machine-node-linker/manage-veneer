@@ -3,8 +3,6 @@
 CLI to create and manage semvar veneer files for operator-framework/operator-registry
 
 ```
-CLI to create and manage semvar veneer files for operator-framework/operator-registry
-
 Usage:
   manage-veneer [command]
 

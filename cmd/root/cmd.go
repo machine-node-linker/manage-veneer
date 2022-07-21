@@ -11,7 +11,7 @@ func NewCMD() *cobra.Command {
 	rootCmd := &cobra.Command{
 		Use:   "manage-veneer",
 		Short: "semver veneer tool",
-		Long:  "CLI to create and manage semvar veneer files for operator-framework/operator-registry",
+		Long:  "CLI to create and manage semver veneer files for operator-framework/operator-registry",
 		Args:  cobra.NoArgs,
 		CompletionOptions: cobra.CompletionOptions{
 			HiddenDefaultCmd: true,
