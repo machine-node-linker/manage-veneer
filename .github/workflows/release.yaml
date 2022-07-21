@@ -28,7 +28,9 @@ jobs:
       - name: Build Package
         id: build
         run: |
-          go build -o ./dist/manage-veneer ./cmd/
+          go build -a -tags netgo -ldflags '-w' -o ./dist/manage-veneer ./cmd/
+        env:
+          CGO_ENABLED: 0
 
       - name: Make Release
         uses: go-semantic-release/action@v1
