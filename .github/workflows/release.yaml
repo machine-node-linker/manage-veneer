@@ -26,7 +26,7 @@ jobs:
       - name: Build CMD
         id: build
         run: |
-          go build ./... -o ./dist/
+          go build -o ./dist/manage-veneer ./cmd/
 
       - uses: go-semantic-release@v1
         id: release
