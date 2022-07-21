@@ -26,6 +26,7 @@ linters-settings:
   errcheck:
     exclude-functions:
       - (*github.com/spf13/cobra.Command).MarkFlagRequired
+      - (*github.com/spf13/cobra.Command).MarkFlagFilename
       - (*github.com/spf13/cobra.Command).MarkPersistentFlagRequired
   wrapcheck:
     ignoreSigs:

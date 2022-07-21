@@ -13,15 +13,15 @@ func NewCMD() *cobra.Command {
 		Short: "semver veneer tool",
 		Long:  "CLI to create and manage semvar veneer files for operator-framework/operator-registry",
 		Args:  cobra.NoArgs,
+		CompletionOptions: cobra.CompletionOptions{
+			HiddenDefaultCmd: true,
+		},
 	}
 
 	rootCmd.AddCommand(
 		appendcmd.NewCMD(),
 		createcmd.NewCMD(),
 	)
-
-	rootCmd.PersistentFlags().String("file", "", "Semver Veneer File Path")
-	rootCmd.MarkPersistentFlagRequired("file")
 
 	return rootCmd
 }

@@ -11,7 +11,7 @@ import (
 
 func NewCMD() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "append",
+		Use:   "append --file filename --bundle image",
 		Short: "create new semver file",
 		Long:  "CLI to create and manage semvar veneer files for operator-framework/operator-registry",
 		PreRunE: func(cmd *cobra.Command, _ []string) error {
@@ -29,8 +29,11 @@ func NewCMD() *cobra.Command {
 	cmd.Flags().String("bundle", "", "bundle image to add")
 	cmd.Flags().String("channel", "candidate", "channel to add bundle to")
 	cmd.Flags().Bool("add-lower", true, "add to channels below --channel")
+	cmd.Flags().String("file", "", "Semver Veneer File Path")
 
 	cmd.MarkFlagRequired("bundle")
+	cmd.MarkFlagRequired("file")
+	cmd.MarkFlagFilename("file")
 
 	return cmd
 }
