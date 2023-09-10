@@ -29,7 +29,7 @@ func NewCMD() *cobra.Command {
 			dir, _ := path.Split(file)
 			if mkdir, _ := cmd.Flags().GetBool("make-dirs"); mkdir {
 				if dir != "" {
-					if err := os.MkdirAll(dir, 0777); err != nil {
+					if err := os.MkdirAll(dir, 0o777); err != nil {
 						return fmt.Errorf("unable to make path: %w", err)
 					}
 				}

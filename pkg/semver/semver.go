@@ -116,7 +116,7 @@ func (sv *SemverVeneer) WriteFile(filename string) error {
 		return fmt.Errorf("unable to write file: %w", err)
 	}
 
-	return os.WriteFile(filename, data, 0644)
+	return os.WriteFile(filename, data, 0o644)
 }
 
 func NewSemverVeneer() *SemverVeneer {
